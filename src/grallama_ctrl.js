@@ -152,7 +152,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         matrix['summary_cell']['value'] = '✓';
       }
       matrix['summary_cell']['numUnhealthy'] = numUnhealthyCells;
-      
+
       // Sort the axis categories
       yCats = Array.from(yCats).sort();
       xCats = Array.from(xCats).sort();
