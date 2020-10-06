@@ -47,6 +47,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       xAxisLabel: 'X-Axis',
       yAxisLabel: 'Y-Axis',
       separator: '-',
+      healthCheckEnabled: false,
       healthCheckThreshold: '0.2',
       healthCheckOperator: '<',
       healthCheckOperatorOptions: [{ text: "<", value: "<" }, { text: ">=", value: ">=" }, { text: "=", value: "=" } ]
@@ -125,33 +126,40 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       var numUnhealthyCells = 0;
       let op = this.panel.healthCheckOperator;
       let threshold = parseFloat(this.panel.healthCheckThreshold);
+      let healthCheck = this.panel.healthCheckEnabled;
 
       // Parse all the series into their buckets
       angular.forEach(series, function(datapoint) {
-      var agg = datapoint.stats[valueName];
-      var datavalue = Number(agg).toFixed(1);
-      if (!that.performHealthCheck(datavalue, op, threshold)) {
-        numUnhealthyCells += 1;
-      }
-      let [yCat, xCat] = datapoint.label.split(separator);
-      yCats.add(yCat);
-      xCats.add(xCat);
-      if (!(yCat in matrix.data)) {
-        // Create the object if it doesn't exist
-        matrix.data[yCat] = {};
-      }
-      matrix.data[yCat][xCat] = datavalue;
+          var agg = datapoint.stats[valueName];
+          var datavalue = Number(agg).toFixed(1);
+          if (healthCheck) {
+              if (!that.performHealthCheck(datavalue, op, threshold)) {
+                numUnhealthyCells += 1;
+              }
+          }
+          let [yCat, xCat] = datapoint.label.split(separator);
+          yCats.add(yCat);
+          xCats.add(xCat);
+          if (!(yCat in matrix.data)) {
+            // Create the object if it doesn't exist
+            matrix.data[yCat] = {};
+          }
+          matrix.data[yCat][xCat] = datavalue;
       });
 
-      if (numUnhealthyCells > 0) {
-        matrix['summary_cell']['style']['color'] = 'red';
-        matrix['summary_cell']['value'] = 'x';
+      if (healthCheck) {
+          if (numUnhealthyCells > 0) {
+            matrix['summary_cell']['style']['color'] = 'red';
+            matrix['summary_cell']['value'] = 'x';
+          }
+          else {
+            matrix['summary_cell']['style']['color'] = 'green';
+            matrix['summary_cell']['value'] = '✓';
+          }
+          matrix['summary_cell']['numUnhealthy'] = numUnhealthyCells;
+      } else {
+          matrix['summary_cell']['style']['visibility'] = 'hidden';
       }
-      else {
-        matrix['summary_cell']['style']['color'] = 'green';
-        matrix['summary_cell']['value'] = '✓';
-      }
-      matrix['summary_cell']['numUnhealthy'] = numUnhealthyCells;
 
       // Sort the axis categories
       yCats = Array.from(yCats).sort();

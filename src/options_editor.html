@@ -47,6 +47,9 @@
   </div>
   <div class="section gf-form-group">
     <h5 class="section-heading">Health Check</h5>
+    <div class="gf-form-inline">
+      <gf-form-switch class="gf-form" label-class="width-4" label="Enabled" checked="ctrl.panel.healthCheckEnabled" on-change="ctrl.render()"></gf-form-switch>
+    </div>
     <div class="gf-form">
       <span class="gf-form-label width-8">Condition</span>
       <select class="gf-form-input width-4" ng-model="ctrl.panel.healthCheckOperator" ng-options="f.value as f.text for f in ctrl.panel.healthCheckOperatorOptions" ng-change="ctrl.render()"></select>
