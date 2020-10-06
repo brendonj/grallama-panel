@@ -39,6 +39,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         threshold: 0.0,
         label: 'Others'
       },
+      baseuri: '',
       tooltipHover: false, // Should there be a tooltip for cells
       colorBackground: true, // Should the cell background be colored
       colorValue: false, // Should the cell value be colored
