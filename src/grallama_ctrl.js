@@ -3,6 +3,7 @@ import _ from 'lodash';
 import kbn from 'app/core/utils/kbn';
 import TimeSeries from 'app/core/time_series';
 import rendering from './rendering';
+import {getDisplayProcessor, formattedValueToString} from '@grafana/data';
 
 export class GraLLAMACtrl extends MetricsPanelCtrl {
 
@@ -70,9 +71,11 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
     this.unitFormats = kbn.getUnitFormats();
   }
 
-  setUnitFormat(subItem) {
-    this.panel.format = subItem.value;
-    this.render();
+  setUnitFormat() {
+      return (unit) => {
+          this.panel.format = unit;
+          this.refresh();
+      };
   }
 
   onDataError() {
@@ -128,6 +131,14 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       let op = this.panel.healthCheckOperator;
       let threshold = parseFloat(this.panel.healthCheckThreshold);
       let healthCheck = this.panel.healthCheckEnabled;
+
+      let processor = getDisplayProcessor({
+          field: {
+              config: {
+                  unit: this.panel.format
+              }
+          }
+      });
 
       // Parse all the series into their buckets
       angular.forEach(series, function(datapoint) {
@@ -197,7 +208,9 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         // Create the data cells
         for (let xCat of xCats) {
           colNum++;
-          let value = matrix.data[yCat][xCat];
+          let raw = matrix.data[yCat][xCat]
+          let value = formattedValueToString(processor(raw));
+
           let cell = {
             'yCat': yCat,
             'xCat': xCat,
@@ -210,10 +223,10 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
             },
           };
           // Add coloring to the cell (if needed) and only if it has a value
-          if ((colorBackground || colorValue) && cell.value) {
+          if ((colorBackground || colorValue) && raw) {
               let color = colors[0]; // Start with the base, and update if greater than thresholds
               angular.forEach(thresholds, function(limit, i) {
-                if (cell.value >= limit) { color = colors[i+1]; }
+                if (raw >= limit) { color = colors[i+1]; }
               });
               if (colorBackground) { cell.style['background-color'] = color; }
               if (colorValue) { cell.style['color'] = color; }
