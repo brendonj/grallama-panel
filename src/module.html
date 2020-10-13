@@ -12,20 +12,19 @@
           All cells are healthy!
         </span>
       </div>
-      <div class="grid-cell" ng-repeat="cell in ctrl.matrix.cells" ng-style="cell.style">
-        <span ng-if="ctrl.panel.baseuri">
-          <a ng-href="{{ ctrl.panel.baseuri }}?var-src={{ cell.xCat }}&var-dst={{ cell.yCat }}&from=now-1h&to=now">{{ cell.value }}</a>
-        </span>
-        <span ng-if="!ctrl.panel.baseuri">
-          {{ cell.value }}
-        </span>
-        <span class="matrix-tooltip" ng-if="cell.tooltip">
-          {{ ctrl.panel.yAxisLabel }}: {{ cell.yCat }}<br/>
-          {{ ctrl.panel.xAxisLabel }}: {{ cell.xCat }}<br/>
-          Value: {{ cell.value }}
-        </span>
-    </div>
-    </div>
-  </div>
-</div>
+
+      <a href="{{ ctrl.panel.baseuri }}?var-src={{ cell.yCat }}&var-dst={{ cell.xCat }}&from=now-24h&to=now" ng-repeat="cell in ctrl.matrix.cells" class="grid-cell" ng-style="cell.style">
+        <div>
+          <span>{{ cell.value }}</span>
+          <span class="matrix-tooltip" ng-if="cell.tooltip">
+            {{ ctrl.panel.yAxisLabel }}: {{ cell.yCat }}<br/>
+            {{ ctrl.panel.xAxisLabel }}: {{ cell.xCat }}<br/>
+            Value: {{ cell.value }}
+          </span>
+        </div>
+      </a>
+
+    </div> <!-- matrix-panel -->
+  </div> <!-- graph-canvas-wrapper -->
+</div> <!-- graph-wrapper -->
 <div class="clearfix"></div>

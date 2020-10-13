@@ -184,6 +184,8 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         colNum++;  // Start 1 cell in, like the data
         matrix['cells'].push({
           value: xCat,
+          xCat: xCat,
+          yCat: yCats.join("&var-src="),
           style: {
             "grid-row": rowNum.toString(),
             "grid-column": colNum.toString(),
@@ -198,6 +200,8 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         // Add a cell for the row header
         matrix['cells'].push({
           value: yCat,
+          xCat: xCats.join("&var-dst="),
+          yCat: yCat,
           style: {
             "grid-row": rowNum.toString(),
             "grid-column": colNum.toString(),
