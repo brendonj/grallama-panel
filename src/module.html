@@ -15,7 +15,8 @@
 
       <a href="{{ ctrl.panel.baseuri }}?var-src={{ cell.yCat }}&var-dst={{ cell.xCat }}&from=now-24h&to=now" ng-repeat="cell in ctrl.matrix.cells" class="grid-cell" ng-style="cell.style">
         <div>
-          <span>{{ cell.value }}</span>
+          <span class="angled-heading" ng-if="cell.style['grid-row'] == '1'">{{ cell.value }}</span>
+          <span ng-if="cell.style['grid-row'] != '1'">{{ cell.value }}</span>
           <span class="matrix-tooltip" ng-if="cell.tooltip">
             {{ ctrl.panel.yAxisLabel }}: {{ cell.yCat }}<br/>
             {{ ctrl.panel.xAxisLabel }}: {{ cell.xCat }}<br/>

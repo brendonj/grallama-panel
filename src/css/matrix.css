@@ -58,3 +58,15 @@
 .summary_cell {
     text-align:center;
 }
+
+
+/* https://css-tricks.com/snippets/css/text-rotation/ */
+.angled-heading {
+    transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    display: block;
+    width: 0px;
+    vertical-align: bottom;
+}

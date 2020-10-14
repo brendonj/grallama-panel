@@ -203,6 +203,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
           style: {
             "grid-row": rowNum.toString(),
             "grid-column": colNum.toString(),
+            "padding-top": "100px",
           }
         });
       }
