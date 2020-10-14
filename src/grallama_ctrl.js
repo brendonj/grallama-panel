@@ -41,6 +41,8 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         label: 'Others'
       },
       baseuri: '',
+      replace1: '',
+      replace2: '',
       tooltipHover: false, // Should there be a tooltip for cells
       colorBackground: true, // Should the cell background be colored
       colorValue: false, // Should the cell value be colored
@@ -102,6 +104,18 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
     } else {
       return dataValue >= threshold
     }
+  }
+
+  trimName(name) {
+    if (this.panel.replace1) {
+        name = name.replace(new RegExp(this.panel.replace1), "")
+    }
+
+    if (this.panel.replace2) {
+        name = name.replace(new RegExp(this.panel.replace2), "")
+    }
+
+    return name;
   }
 
   parseMatrix(series) {
@@ -183,7 +197,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       for (let xCat of xCats) {
         colNum++;  // Start 1 cell in, like the data
         matrix['cells'].push({
-          value: xCat,
+          value: that.trimName(xCat),
           xCat: xCat,
           yCat: yCats.join("&var-src="),
           style: {
@@ -199,7 +213,7 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         colNum = 1; // This needs to be reset for each row
         // Add a cell for the row header
         matrix['cells'].push({
-          value: yCat,
+          value: that.trimName(yCat),
           xCat: xCats.join("&var-dst="),
           yCat: yCat,
           style: {
