@@ -26,6 +26,8 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       legendType: 'Under graph',
       aliasColors: {},
       format: 'short',
+      showSuffix: false,
+      showValue: false,
       valueName: 'avg',
       valueNameOptions: [
         { text: "Min", value: "min" },
@@ -149,7 +151,8 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
       let processor = getDisplayProcessor({
           field: {
               config: {
-                  unit: this.panel.format
+                  unit: this.panel.format,
+                  decimals: 0,
               }
           }
       });
@@ -228,13 +231,19 @@ export class GraLLAMACtrl extends MetricsPanelCtrl {
         for (let xCat of xCats) {
           colNum++;
           let raw = matrix.data[yCat][xCat]
-          let value = formattedValueToString(processor(raw));
+          let unformatted = processor(raw);
+          let formatted = formattedValueToString(unformatted);
+
+          let value = "";
+          if (that.panel.showValue) {
+              value = that.panel.showSuffix ? formatted : unformatted.text;
+          }
 
           let cell = {
             'yCat': yCat,
             'xCat': xCat,
             'value': value,
-            'tooltip': this.panel.tooltipHover,
+            'tooltip': that.panel.tooltipHover ? formatted : false;
             'style': {
               // These must be strings, otherwise they get silently ignored
               'grid-row': rowNum.toString(),

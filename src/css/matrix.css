@@ -21,7 +21,7 @@
    * from getting too wide, unless needed. So this version
    * won't actually take up the full width with smaller
    * sets of data */
-  grid-auto-columns: minmax(min-content, 10vmax);
+  grid-auto-columns: minmax(min-content, 35px);
   /* So headers are kept small if possible.
    * This only impacts the first column as
    * long as we're explicitly setting locations */
